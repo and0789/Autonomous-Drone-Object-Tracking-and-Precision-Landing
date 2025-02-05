@@ -27,18 +27,6 @@ Untuk menjalankan proyek ini, berikut adalah perangkat keras yang diperlukan:
 7. Holybro Telemetry Radio (untuk komunikasi telemetri dengan Ground Station)
 8. Seperangkat Drone Lengkap (frame, ESC, motor, propeller, baterai, RC, dll.)
 
-Struktur Proyek
-
-├── camera_config.py       # Konfigurasi kamera
-├── cleanup.py             # Modul untuk membersihkan sistem saat keluar
-├── config.py              # File konfigurasi (parameter PID, kamera, dan drone)
-├── drone_controller.py    # Kelas untuk mengendalikan drone (takeoff, landing, dll)
-├── init_system.py         # Modul inisialisasi sistem (drone, kamera, tracker)
-├── main.py                # File utama untuk menjalankan sistem
-├── object_tracker.py      # Kelas untuk tracking objek dengan OpenCV
-├── pid_controller.py      # Implementasi kontrol PID
-├── roi_selector.py        # Modul pemilihan ROI menggunakan mouse
-├── tracking.py            # Modul utama untuk pelacakan dan precision landing
 
 Instalasi & Dependensi
 
