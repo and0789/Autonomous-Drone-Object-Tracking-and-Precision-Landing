@@ -26,7 +26,7 @@ Untuk menjalankan proyek ini, berikut adalah perangkat keras yang diperlukan:
 - **Raspberry Pi AI Camera** (untuk deteksi objek dan tracking)
 - **Pixhawk 6C** (autopilot drone)
 - **Holybro Telemetry Radio** (untuk komunikasi telemetri dengan Ground Station)
-- **Seperangkat Drone Lengkap** (frame, ESC, motor, propeller, baterai, dll.)
+- **Seperangkat Drone Lengkap** (frame, ESC, motor, propeller, baterai, RC, dll.)
 
 ---
 ## **Struktur Proyek**
