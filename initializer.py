@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """
 initializer.py
 --------------
@@ -12,45 +11,49 @@ Modul ini bertanggung jawab untuk inisialisasi semua komponen sistem:
 
 import sys
 import logging
+from typing import Tuple, Any
 
 from drone_controller import DroneController
 from camera_config import init_camera
-from roi_selector import ROISelector
+from roi_selection import ROISelector
 from object_tracker import ObjectTracker
-from config import (
-    DRONE_CONNECTION_STRING,
-    TAKEOFF_ALTITUDE,
-    CAMERA_WIDTH,
-    CAMERA_HEIGHT
-)
+from config import DRONE_CONNECTION_STRING, TAKEOFF_ALTITUDE, CAMERA_WIDTH, CAMERA_HEIGHT
 
 
-def initialize_system():
+def initialize_system() -> Tuple[DroneController, Any, ROISelector, ObjectTracker]:
     """
     Inisialisasi semua komponen sistem.
 
-    - Drone: terhubung via DRONE_CONNECTION_STRING, set mode GUIDED, arm, dan takeoff.
-    - Kamera: inisialisasi dengan resolusi dari config (CAMERA_WIDTH, CAMERA_HEIGHT).
-    - ROI Selector dan Object Tracker: untuk pelacakan visual.
+    Proses:
+      - Inisialisasi drone melalui DRONE_CONNECTION_STRING, set mode GUIDED, arm, dan takeoff.
+      - Inisialisasi kamera menggunakan resolusi yang didefinisikan di config.
+      - Inisialisasi ROISelector dan ObjectTracker untuk pelacakan visual.
 
-    :return: Tuple (drone, camera, roi_selector, tracker)
+    :return: Tuple yang berisi (drone, camera, roi_selector, tracker)
     :rtype: (DroneController, Any, ROISelector, ObjectTracker)
     """
     # Inisialisasi drone
-    drone = DroneController(connection_string=DRONE_CONNECTION_STRING)
-    drone.set_mode_guided()
-    drone.arm_drone()
-    drone.takeoff(target_altitude=TAKEOFF_ALTITUDE)
-    logging.info("Drone takeoff complete.")
+    try:
+        drone = DroneController(connection_string=DRONE_CONNECTION_STRING)
+        drone.set_mode_guided()
+        drone.arm_drone()
+        drone.takeoff(target_altitude=TAKEOFF_ALTITUDE)
+        logging.info("Drone takeoff complete.")
+    except Exception as e:
+        logging.error("Gagal menginisialisasi drone: %s", e)
+        sys.exit(1)
 
     # Inisialisasi kamera
     try:
         camera = init_camera(width=CAMERA_WIDTH, height=CAMERA_HEIGHT)
         logging.info("Camera successfully initialized.")
     except Exception as e:
-        logging.error(f"Error initializing camera: {e}")
-        drone.land_drone()
-        drone.close_connection()
+        logging.error("Error initializing camera: %s", e)
+        try:
+            drone.land_drone()
+            drone.close_connection()
+        except Exception as inner_e:
+            logging.error("Error during drone cleanup: %s", inner_e)
         sys.exit(1)
 
     # Inisialisasi ROI Selector dan Object Tracker
@@ -61,7 +64,7 @@ def initialize_system():
 
 
 if __name__ == "__main__":
-    # Logging dasar untuk pengujian
+    # Konfigurasi dasar logging untuk pengujian
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s"
