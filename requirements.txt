@@ -1,0 +1,8 @@
+opencv-python
+numpy
+pymavlink
+dronekit
+matplotlib
+scipy
+pillow
+logging
